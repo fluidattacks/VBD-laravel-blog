@@ -35,6 +35,17 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     protected function gate(): void
     {
-        Gate::define('viewTelescope', fn ($user) => $user->isAdmin());
+        Gate::define('viewTelescope', function (?\App\Models\User $user = null) {
+            $configKey = 'infra.stages';
+            $configured = config($configKey);
+            if (is_string($configured)) {
+                $environments = [$configured];
+            } elseif (is_array($configured)) {
+                $environments = $configured;
+            } else {
+                $environments = [];
+            }
+            return app()->environment($environments);
+        });
     }
 }
