@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->register(\Laravel\Horizon\HorizonServiceProvider::class);
+
         Blade::directive('humanize_date', function (string $params) {
             return "<?php echo humanize_date($params); ?>";
         });
